@@ -238,6 +238,7 @@ class TestFullPipelineLive:
             verifier_model=llm,
             synthesizer_model=llm,
             chunk_db=chunk_db,
+            max_questions=3,
         )
 
     def test_climate_e2e(self, llm, tmp_path, topics_data):
@@ -259,6 +260,7 @@ class TestFullPipelineLive:
             verifier_model=llm,
             synthesizer_model=llm,
             chunk_db=chunk_db,
+            max_questions=3,
         )
 
         compiled = graph.compile(checkpointer=MemorySaver())
@@ -305,6 +307,7 @@ class TestFullPipelineLive:
             verifier_model=llm,
             synthesizer_model=llm,
             chunk_db=chunk_db,
+            max_questions=3,
         )
 
         compiled = graph.compile(checkpointer=MemorySaver())
@@ -335,6 +338,7 @@ class TestFullPipelineLive:
             verifier_model=llm,
             synthesizer_model=llm,
             chunk_db=chunk_db,
+            max_questions=3,
         )
 
         compiled = graph.compile(checkpointer=MemorySaver())

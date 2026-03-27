@@ -109,15 +109,16 @@ def make_synthesis_node(synthesizer_model: BaseChatModel):
     return synthesis_node
 
 
-def make_cove_plan_node(verifier_model: BaseChatModel):
+def make_cove_plan_node(verifier_model: BaseChatModel, max_questions: int = 5):
     """3단계-1: 초안에서 검증 질문 목록을 생성."""
 
     def cove_plan_node(state: dict[str, Any]) -> dict[str, Any]:
         questions_text = verifier_model.invoke(
-            f"다음 초안의 모든 사실적 주장을 검증할 질문 목록을 생성:\n"
+            f"다음 초안의 핵심 사실적 주장을 검증할 질문을 최대 {max_questions}개만 생성하라. "
+            f"가장 중요한 수치와 사실만 검증:\n"
             f"{state['draft']}"
         )
-        questions = parse_questions(questions_text.content)
+        questions = parse_questions(questions_text.content)[:max_questions]
         return {"verification_questions": questions}
 
     return cove_plan_node
@@ -236,6 +237,7 @@ def build_zero_hallucination_pipeline(
     synthesizer_model: BaseChatModel,
     chunk_db: LocalChunkDB,
     config: HarnessConfig | None = None,
+    max_questions: int = 5,
 ) -> StateGraph:
     """무결성 보장 파이프라인 그래프를 생성한다.
 
@@ -259,7 +261,7 @@ def build_zero_hallucination_pipeline(
     graph.add_node("planner", make_planner_node(planner_model))
     graph.add_node("storm_worker", make_storm_worker(worker_model))
     graph.add_node("synthesis", make_synthesis_node(synthesizer_model))
-    graph.add_node("cove_plan", make_cove_plan_node(verifier_model))
+    graph.add_node("cove_plan", make_cove_plan_node(verifier_model, max_questions))
     graph.add_node("factored_verifier", make_factored_verifier(verifier_model))
     graph.add_node("cross_check", make_cross_check_node(verifier_model))
     graph.add_node("sanitizer", make_sanitizer_node(sanitizer))
