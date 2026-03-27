@@ -1,0 +1,12 @@
+[
+  {
+    "input": "서울의 현재 날씨를 알려줘",
+    "expected_tool": "weather_api",
+    "expected_contains": ["온도", "습도"]
+  },
+  {
+    "input": "오늘의 환율을 알려줘",
+    "expected_tool": "exchange_rate_api",
+    "expected_contains": ["원", "달러"]
+  }
+]

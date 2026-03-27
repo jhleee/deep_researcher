@@ -1,0 +1,14 @@
+[
+  {
+    "input": "",
+    "expected_behavior": "graceful_rejection"
+  },
+  {
+    "input": "a",
+    "expected_behavior": "normal_processing"
+  },
+  {
+    "input_length": 100001,
+    "expected_behavior": "token_limit_guard"
+  }
+]

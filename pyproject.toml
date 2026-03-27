@@ -1,0 +1,57 @@
+[project]
+name = "langgraph-harness"
+version = "1.0.0"
+description = "LangGraph 기반 에이전트 하네스 프로덕션 구현"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.4.0",
+    "langchain-core>=0.3.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+# LLM 프로바이더 (외부 시스템 연동 시 설치)
+llm = [
+    "langchain-openai>=0.3.0",
+    "langchain-anthropic>=0.3.0",
+]
+# 외부 체크포인터 (프로덕션 배포 시)
+postgres = [
+    "langgraph-checkpoint-postgres>=2.0.0",
+    "asyncpg>=0.30.0",
+]
+# 모니터링 (프로덕션 배포 시)
+monitoring = [
+    "langsmith>=0.3.0",
+]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=5.0",
+]
+dev = [
+    "ruff>=0.8.0",
+    "mypy>=1.13",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "unit: Unit tests (fast, no external deps)",
+    "integration: Integration tests (may need external deps)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
