@@ -102,5 +102,5 @@ tests/
 2. 선형 파이프라인 아키텍처 (Part II - 2.1)
 3. 오케스트레이터-워커 아키텍처 (Part II - 2.2)
 4. 딥 리서치 아키텍처 (Part II - 2.5)
-5. 무결성 파이프라인 CoVe+Sanitizer (Part III)
+5. ~~무결성 파이프라인 CoVe+Sanitizer (Part III)~~ ✅
 6. 오프라인 평가 하네스 (Part IV)
