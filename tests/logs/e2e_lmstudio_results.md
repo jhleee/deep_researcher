@@ -213,6 +213,37 @@ Final Output:     2,766자 한국어 분석 보고서
 | Self Correction | ~50초 | ✅ PASSED | 1 |
 | **Full E2E** | **~10분** | **✅ PASSED** | **~14** |
 
+---
+
+## 8. Full E2E Pipeline — 기후변화 주제 (2차 실행, 16분)
+
+**동일 구성으로 재실행 결과:**
+```
+Workers:          2개
+Corrections:      2회 (1차: 5 errors, 2차: 4 errors, 3차: 통과)
+Sanitizer Errors: [] (최종 통과)
+Error Log:        ['SANITIZER_FAIL: 5 errors', 'SANITIZER_FAIL: 4 errors']
+Final Output:     2,049자
+소요 시간:        960.54초 (16분 00초)
+```
+
+**최종 보고서 (발췌):**
+```markdown
+# 한국 탄소 배출 및 기후변화 영향 분석 최종 보고서 (수정본)
+
+## 1. 개요: 목적 및 범위
+본 보고서는 한국의 탄소 배출 현황과 기후변화 영향을 분석의
+한계를 고려하여 정책 제언 제시한다.
+* **맥락:** 한국은 OECD 회원국 중 1인당 탄소 배출량이 상위
+  수준의 국가로 인식되고 있다...
+```
+
+**관찰:** LLM이 비결정론적이므로 매 실행마다 초안 내용과 교정 횟수가 다름.
+- 1차 실행: 교정 1회 (2 errors), 2,766자, ~10분
+- 2차 실행: 교정 2회 (5→4→0 errors), 2,049자, ~16분
+
+---
+
 ### 관찰 사항
 
 1. **Thinking 모델 특성:** qwen3.5-9b는 `<think>` 태그로 추론 과정을 출력. `ThinkingModelWrapper`가 이를 자동 제거하여 파이프라인과 호환.
