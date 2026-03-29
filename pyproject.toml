@@ -29,10 +29,16 @@ test = [
     "pytest-asyncio>=0.24",
     "pytest-cov>=5.0",
 ]
+tui = [
+    "textual>=3.0.0",
+]
 dev = [
     "ruff>=0.8.0",
     "mypy>=1.13",
 ]
+
+[project.scripts]
+harness-tui = "harness.tui:main"
 
 [build-system]
 requires = ["setuptools>=68.0"]
