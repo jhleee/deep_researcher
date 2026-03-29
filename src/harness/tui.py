@@ -356,6 +356,7 @@ DataTable {
 # 각 노드가 속한 아키텍처 단계 (stage)
 ARCH_STAGES: dict[str, tuple[str, str, str]] = {
     # node_name → (stage_color, stage_name, stage_icon)
+    "term_resolver":     ("blue",    "Term Resolution", "🔎"),
     "planner":           ("cyan",    "Plan-and-Execute", "📋"),
     "storm_worker":      ("yellow",  "STORM Map-Reduce", "🌪"),
     "synthesis":         ("green",   "STORM Map-Reduce", "🌪"),
@@ -369,6 +370,7 @@ ARCH_STAGES: dict[str, tuple[str, str, str]] = {
 
 # 노드 이름 → (색상, 라벨, 설명)
 NODE_LABELS: dict[str, tuple[str, str, str]] = {
+    "term_resolver":     ("blue",    "Term Resolver", "용어 사전 확인"),
     "planner":           ("cyan",    "Planner", "실행 계획 생성"),
     "storm_worker":      ("yellow",  "STORM Worker", "다중 페르소나 탐색"),
     "synthesis":         ("green",   "Synthesis", "초안 합성"),
@@ -396,6 +398,7 @@ _ROLE_PATTERNS: list[tuple[str, str, str]] = [
     ("오류를 수정하여",      "자기 교정",         "🔧"),
     ("하위 작업으로 분할",    "계획 수립",        "📋"),
     ("독립적인 하위 작업",    "계획 수립",        "📋"),
+    ("고유명사, 제품명, 게임명", "용어 확인",     "🔎"),
 ]
 
 
@@ -413,7 +416,12 @@ def _classify_llm_role(prompt: str) -> tuple[str, str]:
 
 def _summarize_node_output(node_name: str, output: dict) -> str:
     """노드 출력에서 핵심 정보를 한 줄로 요약한다."""
-    if node_name == "planner":
+    if node_name == "term_resolver":
+        tc = output.get("term_context", "")
+        if tc:
+            return f"용어 확인 {len(tc)}자"
+        return ""
+    elif node_name == "planner":
         plan = output.get("execution_plan")
         if plan and hasattr(plan, "sub_tasks"):
             return f"하위 작업 {len(plan.sub_tasks)}개 생성"

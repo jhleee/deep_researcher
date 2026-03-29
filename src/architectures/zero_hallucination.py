@@ -43,6 +43,7 @@ class ZeroHallucinationState(HarnessState):
     검증 질문/답변, sanitizer 오류, 교정 횟수를 추가한다.
     """
 
+    term_context: str  # 용어 확인 결과 (Term Resolver 출력)
     execution_plan: ExecutionPlan | None
     worker_results: Annotated[list[dict], operator.add]
     draft: str | None
@@ -59,13 +60,60 @@ class ZeroHallucinationState(HarnessState):
 # 아래는 독립적으로 테스트 가능하도록 모델을 인자로 받는 팩토리 함수이다.
 
 
+def make_term_resolver_node(resolver_model: BaseChatModel, knowledge_base=None):
+    """0단계: 쿼리 내 고유명사·전문 용어를 사전 확인한다.
+
+    조사를 시작하기 전에 모르는 용어를 먼저 파악하여,
+    이후 모든 노드에 정확한 컨텍스트를 제공한다.
+    """
+
+    def term_resolver_node(state: dict[str, Any]) -> dict[str, Any]:
+        user_request = state["messages"][-1].content
+
+        # 1. 지식 베이스에서 관련 정보 검색
+        kb_context = ""
+        if knowledge_base is not None and knowledge_base.is_loaded:
+            chunks = knowledge_base.search(user_request, top_k=5)
+            if chunks:
+                kb_context = "지식 베이스 검색 결과:\n" + "\n---\n".join(
+                    f"[{c.source}] {c.text[:300]}" for c in chunks
+                )
+
+        # 2. LLM에게 용어 확인 요청 (간결한 결과 요구)
+        prompt = (
+            "아래 요청에 등장하는 고유명사를 각각 한 줄로 정리하라.\n\n"
+            "형식: 용어 → 정식 명칭 (개발사/제조사, 카테고리)\n"
+            "규칙:\n"
+            "- 참고 자료가 있으면 반드시 그 내용에 기반하라.\n"
+            "- 확실하지 않으면 '확인 필요'로 표시하고 추측하지 마라.\n"
+            "- 다른 제품/게임으로 대체하지 마라.\n"
+            "- 500자 이내로 간결하게 답하라.\n"
+        )
+        if kb_context:
+            prompt += f"\n{kb_context}\n"
+        prompt += f"\n요청: {user_request}"
+
+        result = resolver_model.invoke(prompt)
+        term_context = result.content
+
+        return {"term_context": term_context}
+
+    return term_resolver_node
+
+
 def make_planner_node(planner_model: BaseChatModel):
     """1단계: 사용자 요청을 구조화된 실행 계획으로 변환."""
 
     def planner_node(state: dict[str, Any]) -> dict[str, Any]:
         user_request = state["messages"][-1].content
+        term_context = state.get("term_context", "")
+        # structured output 보호: term_context가 너무 길면 축약
+        if len(term_context) > 800:
+            term_context = term_context[:800] + "..."
+
         plan = planner_model.with_structured_output(ExecutionPlan).invoke(
             f"{TOPIC_PRESERVATION_RULE}\n\n"
+            f"용어 확인 결과:\n{term_context}\n\n"
             f"다음 요청을 독립적인 하위 작업으로 분할하라. "
             f"요청에 언급된 고유명사(게임명, 제품명, 기술명 등)를 "
             f"그대로 유지하라:\n{user_request}"
@@ -92,42 +140,44 @@ def make_storm_worker(worker_model: BaseChatModel, knowledge_base=None):
         task_desc = task.description if hasattr(task, "description") else str(task)
         task_id = task.id if hasattr(task, "id") else "unknown"
 
-        # 원본 쿼리 추출 (주제 보존용)
+        # 원본 쿼리 + 용어 컨텍스트 추출
         original_query = ""
         msgs = state.get("messages", [])
         if msgs:
             last = msgs[-1] if isinstance(msgs, list) else msgs
             original_query = last.content if hasattr(last, "content") else str(last)
+        term_context = state.get("term_context", "")
 
-        # 지식 베이스에서 관련 자료 검색
+        # 지식 베이스에서 관련 자료 검색 (로컬 모델 컨텍스트 보호)
         context = ""
         if knowledge_base is not None and knowledge_base.is_loaded:
-            context = knowledge_base.get_context_for_task(task_desc)
+            context = knowledge_base.get_context_for_task(task_desc, max_chars=800)
+
+        # 배경 컨텍스트 구성 (한 번만, 간결하게 — 로컬 모델 컨텍스트 보호)
+        bg = f"{TOPIC_PRESERVATION_RULE}\n"
+        if term_context:
+            bg += f"용어: {term_context[:300]}\n"
+        if context:
+            bg += f"\n{context[:800]}\n"
 
         findings: list[str] = []
         for persona in STORM_PERSONAS:
+            # 이전 발견은 마지막 것만 전달 (컨텍스트 절약)
+            prev = findings[-1][:300] if findings else "없음"
             prompt = (
-                f"{TOPIC_PRESERVATION_RULE}\n"
-                f"원본 요청: {original_query}\n\n"
-                f"[{persona}] 작업: {task_desc}\n이전 발견: {findings}"
+                f"{bg}\n"
+                f"[{persona}] 작업: {task_desc}\n"
+                f"이전 발견 요약: {prev}"
             )
-            if context:
-                prompt = f"{context}\n\n{prompt}"
             result = worker_model.invoke(prompt)
             findings.append(result.content)
 
-        # 압축: 핵심 사실만 추출
+        # 압축
+        all_findings = "\n---\n".join(f[:500] for f in findings)
         compress_prompt = (
             f"{TOPIC_PRESERVATION_RULE}\n"
-            f"원본 요청: {original_query}\n\n"
-            f"핵심 사실만 200토큰 이내로 압축:\n{''.join(findings)}"
+            f"핵심 사실만 200토큰 이내로 압축:\n{all_findings}"
         )
-        if context:
-            compress_prompt = (
-                f"다음 참고 자료의 내용에 기반하여 압축하라. "
-                f"자료에 없는 내용은 포함하지 마라.\n{context}\n\n"
-                f"{compress_prompt}"
-            )
         compressed = worker_model.invoke(compress_prompt)
         return {
             "worker_results": [{"task_id": task_id, "data": compressed.content}]
@@ -156,22 +206,16 @@ def make_synthesis_node(synthesizer_model: BaseChatModel, knowledge_base=None):
         results_text = "\n".join(
             f"[{r['task_id']}]: {r['data']}" for r in state["worker_results"]
         )
-        source_instruction = ""
-        if knowledge_base is not None and knowledge_base.is_loaded:
-            source_instruction = (
-                "참고 자료에서 확인된 내용만 포함하고, "
-                "각 주장에 [출처: 파일명] 형식으로 출처를 명시하라. "
-                "자료에 없는 내용은 작성하지 마라.\n\n"
-            )
-        else:
-            source_instruction = "모든 주장에 반드시 [출처]를 명시:\n"
-
         draft = synthesizer_model.invoke(
             f"{TOPIC_PRESERVATION_RULE}\n"
             f"원본 요청: {original_query}\n\n"
-            f"다음 데이터를 종합하여 보고서 초안을 작성하라. "
-            f"워커 데이터에서 원본 요청의 주제와 다른 내용이 있으면 무시하라. "
-            f"{source_instruction}{results_text}"
+            f"다음 조사 데이터를 종합하여 보고서를 작성하라.\n"
+            f"규칙:\n"
+            f"- 인용 태그([출처:...], [task_...] 등)는 사용하지 마라.\n"
+            f"- 사실적 정보만 자연스러운 문장으로 작성하라.\n"
+            f"- 원본 요청의 주제와 다른 내용은 무시하라.\n"
+            f"- 1500자 이내로 간결하게 작성하라.\n\n"
+            f"{results_text}"
         )
         return {"draft": draft.content}
 
@@ -197,9 +241,12 @@ def make_factored_verifier(verifier_model: BaseChatModel):
     """3단계-2: 초안 컨텍스트 없이 독립적으로 검증 (편향 격리)."""
 
     def factored_verifier(state: dict[str, Any]) -> dict[str, Any]:
-        answer = verifier_model.invoke(
-            f"다음 질문에 사실에 기반하여 답변:\n{state['question']}"
-        )
+        term_ctx = state.get("term_context", "")
+        prompt = ""
+        if term_ctx:
+            prompt += f"참고 용어 정보:\n{term_ctx[:300]}\n\n"
+        prompt += f"다음 질문에 사실에 기반하여 답변:\n{state['question']}"
+        answer = verifier_model.invoke(prompt)
         return {
             "verification_answers": [{
                 "question": state["question"],
@@ -259,11 +306,25 @@ def make_self_correction_node(synthesizer_model: BaseChatModel):
     """4단계-2: Sanitizer 오류 기반 자기 교정."""
 
     def self_correction_node(state: dict[str, Any]) -> dict[str, Any]:
-        error_msg = "\n".join(f"오류: {e}" for e in state["sanitizer_errors"])
-        corrected = synthesizer_model.invoke(
-            f"다음 오류를 수정하여 초안을 다시 작성:\n{error_msg}\n"
-            f"현재 초안:\n{state['draft']}"
-        )
+        errors = state["sanitizer_errors"]
+        draft = state.get("draft", "")
+
+        # 에러가 너무 많으면 인용 형식 문제 → 인용 제거 + 본문 보존
+        if len(errors) > 10:
+            error_sample = "\n".join(f"- {e}" for e in errors[:5])
+            corrected = synthesizer_model.invoke(
+                f"초안에서 검증되지 않은 인용구([출처:...], [task_...] 등)를 "
+                f"모두 제거하고, 본문 내용은 최대한 보존하여 다시 작성하라. "
+                f"오류 예시:\n{error_sample}\n\n"
+                f"현재 초안:\n{draft[:3000]}"
+            )
+        else:
+            error_msg = "\n".join(f"- {e}" for e in errors)
+            corrected = synthesizer_model.invoke(
+                f"다음 오류를 수정하여 초안을 다시 작성하라. "
+                f"본문 내용은 보존하고 잘못된 부분만 수정:\n"
+                f"{error_msg}\n\n현재 초안:\n{draft[:3000]}"
+            )
         return {"draft": corrected.content, "sanitizer_errors": []}
 
     return self_correction_node
@@ -282,10 +343,13 @@ def dispatch_storm_workers(state: dict[str, Any]) -> list[Send]:
     plan = state["execution_plan"]
     if not plan or not plan.sub_tasks:
         return [Send("synthesis", {})]
-    # 원본 메시지를 워커에 전달하여 주제 보존
+    # 원본 메시지와 용어 컨텍스트를 워커에 전달
     msgs = state.get("messages", [])
+    term_ctx = state.get("term_context", "")
     return [
-        Send("storm_worker", {"task": task, "messages": msgs})
+        Send("storm_worker", {
+            "task": task, "messages": msgs, "term_context": term_ctx,
+        })
         for task in plan.sub_tasks
     ]
 
@@ -295,8 +359,12 @@ def dispatch_verifiers(state: dict[str, Any]) -> list[Send]:
     questions = state.get("verification_questions", [])
     if not questions:
         return [Send("cross_check", {})]
+    # term_context를 검증기에도 전달하여 용어 혼동 방지
+    term_ctx = state.get("term_context", "")
     return [
-        Send("factored_verifier", {"question": q, "draft_context": None})
+        Send("factored_verifier", {
+            "question": q, "draft_context": None, "term_context": term_ctx,
+        })
         for q in questions
     ]
 
@@ -343,6 +411,9 @@ def build_zero_hallucination_pipeline(
     graph = StateGraph(ZeroHallucinationState)
 
     # 노드 등록
+    graph.add_node("term_resolver", make_term_resolver_node(
+        planner_model, knowledge_base,
+    ))
     graph.add_node("planner", make_planner_node(planner_model))
     graph.add_node("storm_worker", make_storm_worker(worker_model, knowledge_base))
     graph.add_node("synthesis", make_synthesis_node(synthesizer_model, knowledge_base))
@@ -354,7 +425,8 @@ def build_zero_hallucination_pipeline(
     graph.add_node("finalize", finalize_node)
 
     # 엣지 연결
-    graph.set_entry_point("planner")
+    graph.set_entry_point("term_resolver")
+    graph.add_edge("term_resolver", "planner")
     graph.add_conditional_edges("planner", dispatch_storm_workers)
     graph.add_edge("storm_worker", "synthesis")
     graph.add_edge("synthesis", "cove_plan")

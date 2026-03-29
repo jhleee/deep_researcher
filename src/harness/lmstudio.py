@@ -103,22 +103,33 @@ class ThinkingModelWrapper:
             if isinstance(input_text, str):
                 augmented = (
                     f"{input_text}\n\n"
-                    f"반드시 아래 JSON 형식으로만 응답하라. 코드 블록이나 설명 없이 순수 JSON만 출력.\n"
+                    f"반드시 아래 JSON 형식으로만 응답하라. "
+                    f"코드 블록이나 설명 없이 순수 JSON만 출력.\n"
                     f"형식 예시:\n{example}"
                 )
             else:
                 augmented = input_text
 
-            result = self._llm.invoke(augmented)
-            cleaned = strip_think_tags(result.content)
+            # 최대 2회 시도 (첫 실패 시 더 강하게 JSON 요구)
+            last_error = None
+            for attempt in range(2):
+                result = self._llm.invoke(augmented)
+                cleaned = strip_think_tags(result.content)
+                json_str = _extract_json(cleaned)
+                json_str = _repair_truncated_json(json_str)
 
-            # JSON 추출
-            json_str = _extract_json(cleaned)
+                try:
+                    return schema.model_validate_json(json_str)
+                except Exception as e:
+                    last_error = e
+                    # 재시도: JSON만 출력하도록 더 강하게 지시
+                    augmented = (
+                        f"이전 응답이 유효한 JSON이 아니었다. "
+                        f"다른 설명 없이 오직 JSON만 출력하라.\n"
+                        f"형식:\n{example}"
+                    )
 
-            # 잘린 JSON 복구
-            json_str = _repair_truncated_json(json_str)
-
-            return schema.model_validate_json(json_str)
+            raise last_error  # type: ignore[misc]
 
         return RunnableLambda(_parse_structured)
 
