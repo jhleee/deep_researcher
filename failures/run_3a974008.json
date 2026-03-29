@@ -1,0 +1,11 @@
+{
+  "run_id": "run_3a974008",
+  "input": {
+    "query": "rtx3060 으로 붉은 사막 최적화 플레이 가능한 설정 방법 조사."
+  },
+  "output": {},
+  "error_log": [
+    "Error code: 400 - {'error': 'Context size has been exceeded.'}"
+  ],
+  "timestamp": 1774764981.299733
+}

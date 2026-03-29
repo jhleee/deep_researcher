@@ -1,0 +1,28 @@
+{
+  "run_id": "sil_q8_c1_1774817505",
+  "query": "한국형 발사체 누리호(KSLV-II) 3차 발사 성과와 기술적 의의 조사.",
+  "status": "fail_contamination",
+  "start_time": 1774817505.9543757,
+  "start_time_iso": "2026-03-30 05:51:45",
+  "elapsed": 1556.54,
+  "step_count": 14,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

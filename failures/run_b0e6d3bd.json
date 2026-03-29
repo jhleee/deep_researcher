@@ -1,0 +1,11 @@
+{
+  "run_id": "run_b0e6d3bd",
+  "input": {
+    "query": "RTX3080의 게임 \"붉은 사막\"을 플레이 하기 위한 옵션 설정 검색."
+  },
+  "output": {},
+  "error_log": [
+    "Connection error."
+  ],
+  "timestamp": 1774773477.6940207
+}

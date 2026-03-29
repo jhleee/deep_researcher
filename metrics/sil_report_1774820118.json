@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-03-30 06:35:18",
+  "total_queries": 2,
+  "total_runs": 5,
+  "results": [
+    {
+      "query_id": 7,
+      "difficulty": "medium-hard",
+      "query": "RTX 3080으로 붉은사막(Crimson Desert) 최적화 옵션 셋팅 가이드 조사.",
+      "cycles_used": 2,
+      "final_status": "success",
+      "final_elapsed": 1255.683209180832,
+      "gt_found": [
+        "Crimson Desert",
+        "붉은 사막",
+        "Pearl Abyss"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q7_c0_1774813400",
+        "sil_q7_c1_1774814436"
+      ]
+    },
+    {
+      "query_id": 8,
+      "difficulty": "medium-hard",
+      "query": "한국형 발사체 누리호(KSLV-II) 3차 발사 성과와 기술적 의의 조사.",
+      "cycles_used": 3,
+      "final_status": "fail_contamination",
+      "final_elapsed": 1056.039189338684,
+      "gt_found": [
+        "누리호",
+        "KSLV-II",
+        "KARI"
+      ],
+      "gt_missing": [],
+      "contamination": [
+        "나로호",
+        "KSLV-I"
+      ],
+      "cause": "(A) 주제 이탈",
+      "run_ids": [
+        "sil_q8_c0_1774815692",
+        "sil_q8_c1_1774817505",
+        "sil_q8_c2_1774819062"
+      ]
+    }
+  ],
+  "passed": 1,
+  "total_time": 6688.2142815589905
+}

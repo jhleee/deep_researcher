@@ -1,0 +1,11 @@
+{
+  "run_id": "run_7c3e22a1",
+  "input": {
+    "query": "rtx3060 으로 붉은 사막 최적화 플레이 가능한 설정 방법 조사."
+  },
+  "output": {},
+  "error_log": [
+    "'OutputGuardrail' object has no attribute 'filter'"
+  ],
+  "timestamp": 1774765782.8009725
+}

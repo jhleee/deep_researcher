@@ -1,0 +1,24 @@
+{
+  "run_id": "sil_q2_c0_1774801584",
+  "query": "PlayStation 5와 Xbox Series X의 하드웨어 성능 비교 분석 조사.",
+  "status": "fail_gt",
+  "start_time": 1774801584.143523,
+  "start_time_iso": "2026-03-30 01:26:24",
+  "elapsed": 1864.75,
+  "step_count": 10,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

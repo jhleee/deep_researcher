@@ -1,0 +1,29 @@
+{
+  "run_id": "sil_q5_c0_1774810945",
+  "query": "Apple Vision Pro의 공간 컴퓨팅 핵심 기술과 하드웨어 스펙 분석 조사.",
+  "status": "success",
+  "start_time": 1774810945.6120777,
+  "start_time_iso": "2026-03-30 04:02:25",
+  "elapsed": 1017.69,
+  "step_count": 15,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

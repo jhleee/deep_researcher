@@ -1,0 +1,16 @@
+{
+  "run_id": "sil_q4_c0_1774808786",
+  "query": "Python 3.12의 주요 신기능과 성능 개선사항 조사.",
+  "status": "error",
+  "start_time": 1774808786.7074602,
+  "start_time_iso": "2026-03-30 03:26:26",
+  "elapsed": 727.83,
+  "step_count": 2,
+  "error_msg": "Error code: 400 - {'error': 'Context size has been exceeded.'}",
+  "last_node": "planner",
+  "completed_nodes": [
+    "term_resolver",
+    "planner"
+  ],
+  "phase": "streaming"
+}

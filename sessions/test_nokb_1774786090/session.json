@@ -1,0 +1,13 @@
+{
+  "run_id": "test_nokb_1774786090",
+  "query": "RTX 4090으로 스타필드(Starfield) 울트라 세팅 가이드 조사.",
+  "status": "done",
+  "start_time": 1774786090.9227445,
+  "start_time_iso": "2026-03-29 21:08:10",
+  "elapsed": 1141.18,
+  "step_count": 15,
+  "error_msg": "",
+  "last_node": "",
+  "completed_nodes": [],
+  "phase": ""
+}

@@ -206,7 +206,7 @@ def make_synthesis_node(synthesizer_model: BaseChatModel, knowledge_base=None):
         results_text = "\n".join(
             f"[{r['task_id']}]: {r['data']}" for r in state["worker_results"]
         )
-        draft = synthesizer_model.invoke(
+        prompt = (
             f"{TOPIC_PRESERVATION_RULE}\n"
             f"원본 요청: {original_query}\n\n"
             f"다음 조사 데이터를 종합하여 보고서를 작성하라.\n"
@@ -217,6 +217,16 @@ def make_synthesis_node(synthesizer_model: BaseChatModel, knowledge_base=None):
             f"- 1500자 이내로 간결하게 작성하라.\n\n"
             f"{results_text}"
         )
+        # 최대 2회 시도 (thinking 모델이 빈 응답을 반환하는 경우 대비)
+        for attempt in range(2):
+            draft = synthesizer_model.invoke(prompt)
+            if draft.content.strip():
+                return {"draft": draft.content}
+            # 재시도: 더 직접적인 프롬프트
+            prompt = (
+                f"다음 데이터를 한국어 보고서로 작성하라. "
+                f"반드시 텍스트 내용을 출력하라:\n{results_text[:2000]}"
+            )
         return {"draft": draft.content}
 
     return synthesis_node
@@ -226,12 +236,21 @@ def make_cove_plan_node(verifier_model: BaseChatModel, max_questions: int = 5):
     """3단계-1: 초안에서 검증 질문 목록을 생성."""
 
     def cove_plan_node(state: dict[str, Any]) -> dict[str, Any]:
-        questions_text = verifier_model.invoke(
-            f"다음 초안의 핵심 사실적 주장을 검증할 질문을 최대 {max_questions}개만 생성하라. "
-            f"가장 중요한 수치와 사실만 검증:\n"
-            f"{state['draft']}"
-        )
-        questions = parse_questions(questions_text.content)[:max_questions]
+        draft = state.get("draft", "")
+        # 빈 초안이면 검증 건너뛰기
+        if not draft or not draft.strip():
+            return {"verification_questions": []}
+
+        try:
+            questions_text = verifier_model.invoke(
+                f"다음 초안의 핵심 사실적 주장을 검증할 질문을 최대 {max_questions}개만 생성하라. "
+                f"가장 중요한 수치와 사실만 검증:\n"
+                f"{draft[:3000]}"
+            )
+            questions = parse_questions(questions_text.content)[:max_questions]
+        except Exception:
+            # 400 에러 등 발생 시 기본 질문으로 대체
+            questions = []
         return {"verification_questions": questions}
 
     return cove_plan_node
@@ -261,22 +280,41 @@ def make_cross_check_node(verifier_model: BaseChatModel):
     """3단계-3: 검증 답변과 초안을 교차 대조."""
 
     def cross_check_node(state: dict[str, Any]) -> dict[str, Any]:
-        # 원본 쿼리 추출
+        original_draft = state.get("draft", "")
+
+        # 원본 쿼리 추출 (첫 번째 HumanMessage 사용)
         original_query = ""
         msgs = state.get("messages", [])
-        if msgs:
-            last = msgs[-1] if isinstance(msgs, list) else msgs
+        for m in msgs:
+            if hasattr(m, "type") and m.type == "human":
+                original_query = m.content
+                break
+        if not original_query and msgs:
+            last = msgs[0] if isinstance(msgs, list) else msgs
             original_query = last.content if hasattr(last, "content") else str(last)
+
+        # 검증 답변을 텍스트로 변환 (dict 리스트 → 읽기 쉬운 형식)
+        va = state.get("verification_answers", [])
+        va_text = "\n".join(
+            f"Q: {a.get('question', '')}\nA: {a.get('answer', '')[:300]}"
+            for a in va
+        ) if va else "검증 결과 없음"
 
         verified_draft = verifier_model.invoke(
             f"{TOPIC_PRESERVATION_RULE}\n"
             f"원본 요청: {original_query}\n\n"
-            f"초안:\n{state['draft']}\n\n"
-            f"검증 결과:\n{state['verification_answers']}\n\n"
+            f"초안:\n{original_draft}\n\n"
+            f"검증 결과:\n{va_text}\n\n"
             f"불일치 사항이 있으면 초안을 수정하라. "
-            f"특히 원본 요청의 주제와 다른 주제로 대체된 부분이 있으면 반드시 수정하라."
+            f"특히 원본 요청의 주제와 다른 주제로 대체된 부분이 있으면 반드시 수정하라. "
+            f"수정된 초안 전체를 출력하라."
         )
-        return {"draft": verified_draft.content}
+        # 빈/축소 응답 방어: LLM이 빈 내용이나 극단적으로 짧은 응답을 반환하면
+        # 원본 초안을 보존한다. (thinking 모델이 응답을 <think> 안에만 넣는 경우)
+        result = verified_draft.content.strip()
+        if not result or len(result) < len(original_draft) * 0.3:
+            return {"draft": original_draft}
+        return {"draft": result}
 
     return cross_check_node
 

@@ -1,0 +1,11 @@
+{
+  "run_id": "sil_q2_c0_1774801584",
+  "scores": {
+    "error_free": 1.0,
+    "has_response": 1.0,
+    "ground_truth_score": 0.0,
+    "contamination_free": 1.0,
+    "sanitizer_clean": 1.0
+  },
+  "timestamp": 1774803448.892949
+}

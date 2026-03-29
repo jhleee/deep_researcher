@@ -1,0 +1,33 @@
+{
+  "run_id": "sil_q4_c1_1774809514",
+  "query": "Python 3.12의 주요 신기능과 성능 개선사항 조사.",
+  "status": "success",
+  "start_time": 1774809514.586147,
+  "start_time_iso": "2026-03-30 03:38:34",
+  "elapsed": 1404.38,
+  "step_count": 19,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "self_correct",
+    "sanitizer",
+    "self_correct",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

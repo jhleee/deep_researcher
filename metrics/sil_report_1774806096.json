@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-03-30 02:41:36",
+  "total_queries": 2,
+  "total_runs": 3,
+  "results": [
+    {
+      "query_id": 1,
+      "difficulty": "easy",
+      "query": "RTX 4090으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 조사.",
+      "cycles_used": 1,
+      "final_status": "success",
+      "final_elapsed": 2559.67050242424,
+      "gt_found": [
+        "Cyberpunk 2077",
+        "CD Projekt"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q1_c0_1774799024"
+      ]
+    },
+    {
+      "query_id": 2,
+      "difficulty": "easy",
+      "query": "PlayStation 5와 Xbox Series X의 하드웨어 성능 비교 분석 조사.",
+      "cycles_used": 2,
+      "final_status": "success",
+      "final_elapsed": 2647.6476702690125,
+      "gt_found": [
+        "PlayStation 5",
+        "Xbox Series X"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q2_c0_1774801584",
+        "sil_q2_c1_1774803448"
+      ]
+    }
+  ],
+  "passed": 2,
+  "total_time": 7072.066599607468
+}

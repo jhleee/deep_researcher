@@ -1,0 +1,11 @@
+{
+  "run_id": "sil_q8_c1_1774817505",
+  "scores": {
+    "error_free": 1.0,
+    "has_response": 1.0,
+    "ground_truth_score": 1.0,
+    "contamination_free": 0.0,
+    "sanitizer_clean": 1.0
+  },
+  "timestamp": 1774819062.499177
+}

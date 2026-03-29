@@ -1,0 +1,21 @@
+{
+  "run_id": "sil_q1_c0_1774795662",
+  "query": "RTX 4090으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 조사.",
+  "status": "error",
+  "start_time": 1774795662.23206,
+  "start_time_iso": "2026-03-29 23:47:42",
+  "elapsed": 826.6,
+  "step_count": 7,
+  "error_msg": "Error code: 400 - {'error': 'Failed to parse input at pos 0: Thinking Process:\\n\\n1.  **Analyze the Request:**\\n    *   **Reference Terms:**\\n        *   RTX 4090 → NVIDIA GeForce RTX 4090 (NVIDIA, graphics card)\\n        *   Cyberpunk 2077 → Cyberpunk 2077 (CD Projekt Red, video game)\\n        *   Ultra Preset → Ultra Preset (game setting option)\\n    *   **Question:** \"Should I verify official support policies to ensure compatibility with the latest patch version and validity of optimization guides in a Windows 10 environment?\" (윈도우 10 환경에서도 최신 패치 버전 호환성을 보장하며 최적화 가이드가 유�한'}",
+  "last_node": "cove_plan",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan"
+  ],
+  "phase": "streaming"
+}

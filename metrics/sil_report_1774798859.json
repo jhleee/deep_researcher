@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-03-30 00:40:59",
+  "total_queries": 1,
+  "total_runs": 3,
+  "results": [
+    {
+      "query_id": 1,
+      "difficulty": "easy",
+      "query": "RTX 4090으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 조사.",
+      "cycles_used": 3,
+      "final_status": "fail_gt",
+      "final_elapsed": 1259.2369918823242,
+      "gt_found": [
+        "Cyberpunk 2077",
+        "CD Projekt"
+      ],
+      "gt_missing": [
+        "사이버펑크"
+      ],
+      "contamination": [],
+      "cause": "(A) 주제 이탈 또는 정보 부족",
+      "run_ids": [
+        "sil_q1_c0_1774795662",
+        "sil_q1_c1_1774796488",
+        "sil_q1_c2_1774797599"
+      ]
+    }
+  ],
+  "passed": 0,
+  "total_time": 3196.856669187546
+}
