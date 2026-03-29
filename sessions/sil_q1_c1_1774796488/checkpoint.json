@@ -1,0 +1,105 @@
+{
+  "term_context": "RTX 4090 → NVIDIA GeForce RTX 4090 (NVIDIA, 그래픽 카드)\nCyberpunk 2077 → 사이버펑크 2077 (CD Projekt Red, 비디오 게임)\n울트라 세팅 → Ultra Preset (게임 설정 옵션)",
+  "execution_plan": {
+    "goal": "RTX 4090 으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 조사",
+    "sub_tasks": [
+      {
+        "id": "task_hardware_analysis",
+        "description": "RTX 4090 하드웨어 스펙 및 사이버펑크 2077(Cyberpunk 2077) 최소/권장 사양 비교 분석",
+        "tool_name": "하드웨어 데이터베이스 검색",
+        "dependencies": []
+      },
+      {
+        "id": "task_settings_review",
+        "description": "사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 옵션별 성능 영향도 검토",
+        "tool_name": "게임 설정 가이드 분석",
+        "dependencies": [
+          "task_hardware_analysis"
+        ]
+      },
+      {
+        "id": "task_optimization_search",
+        "description": "RTX 4090 기반 울트라 세팅 최적화 팁 및 패치 정보 수집",
+        "tool_name": "기술 포럼 및 커뮤니티 검색",
+        "dependencies": [
+          "task_settings_review"
+        ]
+      },
+      {
+        "id": "task_guide_compilation",
+        "description": "RTX 4090 으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 최종 작성",
+        "tool_name": "문서 편집 도구",
+        "dependencies": [
+          "task_optimization_search"
+        ]
+      }
+    ]
+  },
+  "plan": [
+    {
+      "id": "task_hardware_analysis",
+      "description": "RTX 4090 하드웨어 스펙 및 사이버펑크 2077(Cyberpunk 2077) 최소/권장 사양 비교 분석",
+      "tool_name": "하드웨어 데이터베이스 검색",
+      "dependencies": []
+    },
+    {
+      "id": "task_settings_review",
+      "description": "사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 옵션별 성능 영향도 검토",
+      "tool_name": "게임 설정 가이드 분석",
+      "dependencies": [
+        "task_hardware_analysis"
+      ]
+    },
+    {
+      "id": "task_optimization_search",
+      "description": "RTX 4090 기반 울트라 세팅 최적화 팁 및 패치 정보 수집",
+      "tool_name": "기술 포럼 및 커뮤니티 검색",
+      "dependencies": [
+        "task_settings_review"
+      ]
+    },
+    {
+      "id": "task_guide_compilation",
+      "description": "RTX 4090 으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 최종 작성",
+      "tool_name": "문서 편집 도구",
+      "dependencies": [
+        "task_optimization_search"
+      ]
+    }
+  ],
+  "worker_results": [
+    {
+      "task_id": "task_settings_review",
+      "data": "사이버펑크 2077 의 Ultra Preset 옵션은 GPU 부하와 프레임률에 큰 영향을 미칩니다. 텍스처, 그림자, 광선 추적 최상위 활성화로 4K 환경에서 중급 대비 30~50% 프레임 감소 가능. VRAM 사용량 급증으로 용량 부족 시 로딩 시간 증가 및 성능 저하 발생. NVIDIA GeForce RTX 4090 도 대역폭 부하 주의. CPU 의존도 높은 AI, 물리 시뮬레이션 영역에서 병목 현상 가능성 있음. 고해상도 텍스처 팩 설치 시 VRAM 사용량 증가로 시스템 메모리 관리 중요. CD Projekt Red 게임 엔진 특성상 그래픽 처리 집중에도 불구하고 CPU 성능 부족 시 프레임 제한 요인이 될 수 있음. 울트라 세팅 선택 시 전체적인 메모리 용량과 대역폭 고려 필요."
+    }
+  ],
+  "draft": "",
+  "verification_questions": [
+    "NVIDIA GeForce RTX 4090 의 공식 스펙인 CUDA 코어 수 (16384 개) 와 VRAM 용량 (24GB) 가 정확한가?",
+    "RTX 4090 의 공식 TDP(전력 소모) 값이 450W 로 정해진 표준인가?",
+    "사이버펑크 2077 에서 지원되는 DLSS 버전은 3.0 인지 3.5 인지, 그리고 프레임 생성 기능이 울트라 세팅에서 실제로 작동하는가?",
+    "울트라 세팅 환경에서 4K 해상도의 중급 대비 프레임 감소폭과 DLSS 적용 시 성능 향상 효과를 수치로 비교할 수 있는 데이터가 존재하는가?",
+    "CD Projekt Red 의 공식 권장 사양에 RTX 4090 이 포함되며 특정 그래픽 카드 전용 패치가 존재하지 않는다는 주장은 사실인가?"
+  ],
+  "verification_answers": [
+    {
+      "question": "CD Projekt Red 의 공식 권장 사양에 RTX 4090 이 포함되며 특정 그래픽 카드 전용 패치가 존재하지 않는다는 주장은 사실인가?",
+      "answer": "아니요, 해당 주장은 **사실과 다릅니다**.\n\n1.  **공식 권장 사양 포함 여부**: CD Projekt Red 의 공식 시스템 요구 사항 (Steam 등) 에 따르면, 《사이버펑크 2077》의 '권장 사양'은 일반적으로 **NVIDIA GeForce RTX 3080** 또는 AMD RX 6800 XT 등을 기준으로 명시되어 있습니다. 출시 당시부터 현재까지 공식 권장 목록에 **RTX 4090**이 포함되어 있는 것은 아니며, RTX 4090 은 권장 사양을 훨씬 상회하는 '울트라 세팅' 이상의 고사양 하드웨어로 분류됩니다.\n2.  **그래픽 카드 전용 패치**: CD Projekt Red 는 게임 업데이트 (예: 패치 1.3, 1.5 등) 를 통해 다양한 그래픽 카드의 호환성 및 성능 문제를 해결하기 위한 일반적인 패치를 여러 번 출시했습니다. 특정 그래픽 카드 모델에 대한 별도의 전용 드라이버나 패치가 존재하지는 않지만, 게임 업데이트를 통해 특정 하드웨어 환경에서의 문제 (예: DLSS 지원, 셰이더 컴파일 오류 등) 를 수정한 사례가 있습니다.\n\n따라서 \"공식 권장 사양에 RTX 4090 이 포함되며 특정 그래픽 카드 전용 패치가 존재하지 않는다\"는 주장은 **사실이 아닙니다**."
+    }
+  ],
+  "sanitizer_errors": [],
+  "correction_count": 0,
+  "messages": [
+    {
+      "content": "",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": null,
+      "id": null,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  ]
+}

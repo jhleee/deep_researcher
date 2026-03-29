@@ -1,0 +1,29 @@
+{
+  "run_id": "sil_q3_c0_1774806405",
+  "query": "Tesla Model 3 Highland 2024년형 주요 변경사항과 개선점 조사.",
+  "status": "fail_gt",
+  "start_time": 1774806405.7232609,
+  "start_time_iso": "2026-03-30 02:46:45",
+  "elapsed": 1060.04,
+  "step_count": 15,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

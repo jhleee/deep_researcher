@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-03-30 04:36:10",
+  "total_queries": 2,
+  "total_runs": 2,
+  "results": [
+    {
+      "query_id": 5,
+      "difficulty": "medium",
+      "query": "Apple Vision Pro의 공간 컴퓨팅 핵심 기술과 하드웨어 스펙 분석 조사.",
+      "cycles_used": 1,
+      "final_status": "success",
+      "final_elapsed": 1017.6868968009949,
+      "gt_found": [
+        "Vision Pro",
+        "Apple"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q5_c0_1774810945"
+      ]
+    },
+    {
+      "query_id": 6,
+      "difficulty": "medium",
+      "query": "SpaceX Starship 발사체의 재사용 기술 혁신과 발사 이력 조사.",
+      "cycles_used": 1,
+      "final_status": "success",
+      "final_elapsed": 1007.4593436717987,
+      "gt_found": [
+        "Starship",
+        "SpaceX"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q6_c0_1774811963"
+      ]
+    }
+  ],
+  "passed": 2,
+  "total_time": 2025.1462404727936
+}

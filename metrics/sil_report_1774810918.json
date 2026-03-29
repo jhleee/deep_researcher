@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-03-30 04:01:58",
+  "total_queries": 2,
+  "total_runs": 4,
+  "results": [
+    {
+      "query_id": 3,
+      "difficulty": "easy-medium",
+      "query": "Tesla Model 3 Highland 2024년형 주요 변경사항과 개선점 조사.",
+      "cycles_used": 2,
+      "final_status": "success",
+      "final_elapsed": 1320.9020028114319,
+      "gt_found": [
+        "Model 3",
+        "Tesla"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q3_c0_1774806405",
+        "sil_q3_c1_1774807465"
+      ]
+    },
+    {
+      "query_id": 4,
+      "difficulty": "easy-medium",
+      "query": "Python 3.12의 주요 신기능과 성능 개선사항 조사.",
+      "cycles_used": 2,
+      "final_status": "success",
+      "final_elapsed": 1404.3759615421295,
+      "gt_found": [
+        "Python 3.12"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q4_c0_1774808786",
+        "sil_q4_c1_1774809514"
+      ]
+    }
+  ],
+  "passed": 2,
+  "total_time": 4513.150147199631
+}

@@ -1,0 +1,19 @@
+{
+  "max_iterations": 10,
+  "max_tokens_budget": 20000,
+  "checkpoint_backend": "json_file",
+  "checkpoint_dir": "checkpoints",
+  "guardrail_strict": true,
+  "human_in_the_loop": false,
+  "sources": {
+    "local_enabled": false,
+    "local_directory": "",
+    "local_chunk_size": 1000,
+    "local_chunk_overlap": 200,
+    "web_search_enabled": false,
+    "web_search_max_results": 5,
+    "web_search_page_timeout": 20
+  },
+  "lm_studio_url": "http://169.254.83.107:1234/v1",
+  "lm_studio_model": "qwen/qwen3.5-9b"
+}

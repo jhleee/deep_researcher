@@ -1,0 +1,13 @@
+{
+  "run_id": "test_1774784455",
+  "query": "rtx3080의 붉은사막 최적화 옵션 셋팅 가이드 조사.",
+  "status": "done",
+  "start_time": 1774784456.0358942,
+  "start_time_iso": "2026-03-29 20:40:56",
+  "elapsed": 1254.61,
+  "step_count": 15,
+  "error_msg": "",
+  "last_node": "",
+  "completed_nodes": [],
+  "phase": ""
+}

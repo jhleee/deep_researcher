@@ -1,0 +1,30 @@
+{
+  "run_id": "sil_q1_c1_1774796488",
+  "query": "RTX 4090으로 사이버펑크 2077(Cyberpunk 2077) 울트라 세팅 최적화 가이드 조사.",
+  "status": "fail_gt",
+  "start_time": 1774796488.859613,
+  "start_time_iso": "2026-03-30 00:01:28",
+  "elapsed": 1111.02,
+  "step_count": 16,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

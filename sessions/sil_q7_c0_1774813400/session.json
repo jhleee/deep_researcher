@@ -1,0 +1,23 @@
+{
+  "run_id": "sil_q7_c0_1774813400",
+  "query": "RTX 3080으로 붉은사막(Crimson Desert) 최적화 옵션 셋팅 가이드 조사.",
+  "status": "fail_gt",
+  "start_time": 1774813400.1241493,
+  "start_time_iso": "2026-03-30 04:43:20",
+  "elapsed": 1006.22,
+  "step_count": 9,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

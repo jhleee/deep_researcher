@@ -1,0 +1,96 @@
+{
+  "term_context": "붉은 사막 → Crimson Desert (Pearl Abyss, 게임)\n검은 사막 → Black Desert (Pearl Abyss, 게임 시리즈)\nPearl Abyss → Pearl Abyss (개발사)\nRTX 3080 → (NVIDIA, 그래픽 카드)\nDLSS → (NVIDIA, 기술)\nFSR → AMD FidelityFX Super Resolution (AMD, 기술)\nNVIDIA 제어판 → (NVIDIA, 소프트웨어)\nAmpere → (NVIDIA, 아키텍처)\nPS5 → (Sony, 플랫폼)\nXbox Series X|S → (Microsoft, 플랫폼)",
+  "execution_plan": {
+    "goal": "rtx3080 의 붉은사막 최적화 옵션 셋팅 가이드 조사",
+    "sub_tasks": [
+      {
+        "id": "task_001",
+        "description": "Pearl Abyss 공식 채널 및 웹사이트에서 붉은사막의 공식 최적화 설정 가이드 확인",
+        "tool_name": "웹 검색",
+        "dependencies": [
+          "없음"
+        ]
+      },
+      {
+        "id": "task_002",
+        "description": "NVIDIA RTX 3080 호환성 및 DLSS/FSR 지원 상태 관련 문서 분석",
+        "tool_name": "기술 문서 분석",
+        "dependencies": [
+          "없음"
+        ]
+      },
+      {
+        "id": "task_003",
+        "description": "커뮤니티 포럼 및 최적화 가이드 공유 사이트에서 붉은사막 rtx3080 설정 정보 수집",
+        "tool_name": "웹 검색",
+        "dependencies": [
+          "없음"
+        ]
+      }
+    ]
+  },
+  "plan": [
+    {
+      "id": "task_001",
+      "description": "Pearl Abyss 공식 채널 및 웹사이트에서 붉은사막의 공식 최적화 설정 가이드 확인",
+      "tool_name": "웹 검색",
+      "dependencies": [
+        "없음"
+      ]
+    },
+    {
+      "id": "task_002",
+      "description": "NVIDIA RTX 3080 호환성 및 DLSS/FSR 지원 상태 관련 문서 분석",
+      "tool_name": "기술 문서 분석",
+      "dependencies": [
+        "없음"
+      ]
+    },
+    {
+      "id": "task_003",
+      "description": "커뮤니티 포럼 및 최적화 가이드 공유 사이트에서 붉은사막 rtx3080 설정 정보 수집",
+      "tool_name": "웹 검색",
+      "dependencies": [
+        "없음"
+      ]
+    }
+  ],
+  "worker_results": [
+    {
+      "task_id": "task_001",
+      "data": "정보를 찾을 수 없다. Pearl Abyss 공식 채널 및 웹사이트에서 'Crimson Desert'의 공식 최적화 설정 가이드에 대한 정보는 확인되지 않았습니다. 제공된 참고 자료는 구체적인 공식 출처를 명시하지 않았으며, 추측으로 다른 정보를 대입할 수 없습니다."
+    }
+  ],
+  "draft": "제공해주신 오류 로그를 분석한 결과, 해당 초안에는 실제 원본에 존재하지 않는 가상의 인용구 (FAKE_CITATION) 가 포함되어 있습니다. 입력이 잘려서 원본 텍스트가 확인되지 않아 정확한 내용을 복원할 수 없으므로, 다음과 같이 수정해야 합니다.\n\n1. **가상 인용구 제거**: '파일명...', 'task_001', 'task_002' 등 원본에 없는 인용구를 모두 삭제합니다.\n2. **내용 재작성**: 인용 없이 일반 문장으로 내용을 다듬어 오류를 없앱니다.\n3. **출처 명시**: 실제 참조된 문서가 있다면 올바른 형식으로 다시 인용해야 합니다.\n\n원본 텍스트를 제공해 주시면 정확한 초안 수정이 가능합니다.",
+  "verification_questions": [
+    "Pearl Abyss 공식 채널에 붉은 사막 (Crimson Desert) 의 공식 최적화 설정 가이드가 존재하는지 확인해야 하는가? [출처: task_001]",
+    "RTX 3080 에서 프레임 생성 (Frame Gen) 기능이 지원되는지 여부를 검증할 수 있는가? [출처: task_002]",
+    "지원하는 DLSS 모드의 구체적인 종류 (Quality, Balanced 등) 가 명시되어 있는가? [출처: task_002]",
+    "레이 트레이싱 (Ray Tracing) 설정에 대한 공식 권장 사항이 포함되어 있는가? [출처: task_003]",
+    "참고 자료에서 FSR 지원 여부 정보가 명확히 확인되는지 검증할 수 있는가? [출처: task_002]"
+  ],
+  "verification_answers": [
+    {
+      "question": "참고 자료에서 FSR 지원 여부 정보가 명확히 확인되는지 검증할 수 있는가? [출처: task_002]",
+      "answer": "현재 제공된 참고 자료나 대화 컨텍스트에는 FSR 지원 여부와 관련된 구체적인 정보가 포함되어 있지 않습니다. 따라서 해당 정보를 명확히 검증할 수 없습니다. 관련 문서를 함께 제공해 주시면, 그 내용을 바탕으로 확인해 드리겠습니다."
+    }
+  ],
+  "sanitizer_errors": [],
+  "error_log": [
+    "SANITIZER_FAIL: 106 errors"
+  ],
+  "correction_count": 1,
+  "messages": [
+    {
+      "content": "제공해주신 오류 로그를 분석한 결과, 해당 초안에는 실제 원본에 존재하지 않는 가상의 인용구 (FAKE_CITATION) 가 포함되어 있습니다. 입력이 잘려서 원본 텍스트가 확인되지 않아 정확한 내용을 복원할 수 없으므로, 다음과 같이 수정해야 합니다.\n\n1. **가상 인용구 제거**: '파일명...', 'task_001', 'task_002' 등 원본에 없는 인용구를 모두 삭제합니다.\n2. **내용 재작성**: 인용 없이 일반 문장으로 내용을 다듬어 오류를 없앱니다.\n3. **출처 명시**: 실제 참조된 문서가 있다면 올바른 형식으로 다시 인용해야 합니다.\n\n원본 텍스트를 제공해 주시면 정확한 초안 수정이 가능합니다.",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": null,
+      "id": null,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  ]
+}
