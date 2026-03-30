@@ -108,6 +108,10 @@ class DeterministicSanitizer:
     CITATION_PATTERN = re.compile(r"\[출처:\s*(.+?)\]|\[ref:\s*(.+?)\]")
     URL_PATTERN = re.compile(r"https?://[\S]+")
     NUMBER_PATTERN = re.compile(r"(\d+\.?\d*)%|\$(\d+[.,]?\d*)")
+    # 날짜 패턴: "2023년 4월 20일", "2020년 12월 9일" 등
+    DATE_PATTERN = re.compile(
+        r"(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일"
+    )
 
     def __init__(self, chunk_db: LocalChunkDB):
         self.chunk_db = chunk_db
@@ -147,6 +151,55 @@ class DeterministicSanitizer:
                     description=f"수치 '{num}'의 출처를 확인할 수 없음.",
                 ))
 
+        # 4. 날짜-이벤트 연관성 검증
+        errors.extend(self._check_dates(draft))
+
+        return errors
+
+    def _check_dates(self, draft: str) -> list[SanitizeError]:
+        """날짜 표현이 KB 청크에 존재하는지 검증한다.
+
+        '2023년 4월 20일'과 같은 구체적 날짜가 원본 소스에 없으면
+        DATE_UNVERIFIED 오류를 발생시킨다.
+        """
+        errors: list[SanitizeError] = []
+        if not self.chunk_db._chunks:
+            return errors  # KB가 비어있으면 날짜 검증 생략
+
+        for match in self.DATE_PATTERN.finditer(draft):
+            year, month, day = match.group(1), match.group(2), match.group(3)
+            date_str = match.group(0)
+
+            # 주변 문맥 추출 (날짜 앞뒤 60자)
+            start = max(0, match.start() - 60)
+            end = min(len(draft), match.end() + 60)
+            context = draft[start:end]
+
+            # KB에서 동일 날짜를 포함하는 청크가 있는지 확인
+            # 다양한 날짜 표기를 시도: "2023년 4월", "2023-04-20", "4월 20일" 등
+            date_variants = [
+                f"{year}년 {month}월 {day}일",
+                f"{year}년 {int(month)}월 {int(day)}일",
+                f"{year}-{month.zfill(2)}-{day.zfill(2)}",
+                f"{year}/{month}/{day}",
+                f"{month}월 {day}일",
+            ]
+
+            found = False
+            for variant in date_variants:
+                if self.chunk_db.exact_match(variant):
+                    found = True
+                    break
+
+            if not found:
+                errors.append(SanitizeError(
+                    error_type="DATE_UNVERIFIED",
+                    location=f"pos {match.start()}",
+                    description=(
+                        f"날짜 '{date_str}'의 출처를 확인할 수 없음. "
+                        f"문맥: '...{context.strip()}...'"
+                    ),
+                ))
         return errors
 
     def validate_as_strings(self, draft: str) -> list[str]:

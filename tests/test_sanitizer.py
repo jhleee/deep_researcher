@@ -101,3 +101,49 @@ class TestDeterministicSanitizer:
         assert isinstance(results, list)
         assert all(isinstance(s, str) for s in results)
         assert len(results) >= 1
+
+    def test_unverified_date_detected(self):
+        """KB에 없는 날짜가 DATE_UNVERIFIED로 탐지되는지 확인."""
+        db = LocalChunkDB()
+        db.add_chunk("SN8은 2020년 12월 9일 첫 비행을 했다.", source="spacex")
+        sanitizer = DeterministicSanitizer(chunk_db=db)
+
+        # KB에 없는 날짜 → DATE_UNVERIFIED
+        draft = "SN8은 2023년 4월 20일 첫 비행 테스트를 진행했습니다."
+        errors = sanitizer.validate(draft)
+        date_errors = [e for e in errors if e.error_type == "DATE_UNVERIFIED"]
+        assert len(date_errors) == 1
+        assert "2023년 4월 20일" in date_errors[0].description
+
+    def test_verified_date_no_error(self):
+        """KB에 존재하는 날짜는 오류를 발생시키지 않는지 확인."""
+        db = LocalChunkDB()
+        db.add_chunk("SN8은 2020년 12월 9일 첫 비행을 했다.", source="spacex")
+        sanitizer = DeterministicSanitizer(chunk_db=db)
+
+        draft = "SN8은 2020년 12월 9일 첫 비행을 했다."
+        errors = sanitizer.validate(draft)
+        date_errors = [e for e in errors if e.error_type == "DATE_UNVERIFIED"]
+        assert len(date_errors) == 0
+
+    def test_date_check_skipped_when_no_kb(self):
+        """KB가 비어있으면 날짜 검증을 건너뛴다."""
+        db = LocalChunkDB()  # 빈 DB
+        sanitizer = DeterministicSanitizer(chunk_db=db)
+
+        draft = "SN8은 2023년 4월 20일 첫 비행을 했다."
+        errors = sanitizer.validate(draft)
+        date_errors = [e for e in errors if e.error_type == "DATE_UNVERIFIED"]
+        assert len(date_errors) == 0  # 빈 KB에서는 건너뜀
+
+    def test_date_multiple_formats(self):
+        """다양한 날짜 표기를 정확히 매칭하는지 확인."""
+        db = LocalChunkDB()
+        db.add_chunk("2023-04-20에 IFT-1 발사", source="spacex")
+        sanitizer = DeterministicSanitizer(chunk_db=db)
+
+        # "2023년 4월 20일" → "2023-04-20" 변환 후 매칭
+        draft = "IFT-1은 2023년 4월 20일 발사되었다."
+        errors = sanitizer.validate(draft)
+        date_errors = [e for e in errors if e.error_type == "DATE_UNVERIFIED"]
+        assert len(date_errors) == 0

@@ -1,0 +1,30 @@
+{
+  "run_id": "sil_q10_c0_1774848080",
+  "query": "중국 RISC-V 프로세서 Xuantie C910(玄铁)의 아키텍처와 기술적 의의 조사.",
+  "status": "success",
+  "start_time": 1774848080.6434822,
+  "start_time_iso": "2026-03-30 14:21:20",
+  "elapsed": 2184.48,
+  "step_count": 16,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

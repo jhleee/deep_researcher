@@ -1,0 +1,28 @@
+{
+  "run_id": "sil_q9_c1_1774844376",
+  "query": "Project Cambria(현 Meta Quest Pro)의 XR 칩셋과 트래킹 기술 분석 조사.",
+  "status": "fail_gt",
+  "start_time": 1774844376.0434518,
+  "start_time_iso": "2026-03-30 13:19:36",
+  "elapsed": 1449.31,
+  "step_count": 14,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

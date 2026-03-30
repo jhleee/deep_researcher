@@ -243,8 +243,11 @@ def make_cove_plan_node(verifier_model: BaseChatModel, max_questions: int = 5):
 
         try:
             questions_text = verifier_model.invoke(
-                f"다음 초안의 핵심 사실적 주장을 검증할 질문을 최대 {max_questions}개만 생성하라. "
-                f"가장 중요한 수치와 사실만 검증:\n"
+                f"다음 초안의 핵심 사실적 주장을 검증할 질문을 최대 {max_questions}개만 생성하라.\n"
+                f"규칙:\n"
+                f"- 구체적 날짜가 언급된 경우 반드시 '해당 날짜에 실제로 그 이벤트가 있었는가?' 질문을 포함\n"
+                f"- 특정 버전/모델 번호와 이벤트의 연관이 정확한지 확인\n"
+                f"- 가장 중요한 수치와 사실만 검증\n\n"
                 f"{draft[:3000]}"
             )
             questions = parse_questions(questions_text.content)[:max_questions]
@@ -266,10 +269,16 @@ def make_factored_verifier(verifier_model: BaseChatModel):
             prompt += f"참고 용어 정보:\n{term_ctx[:300]}\n\n"
         prompt += f"다음 질문에 사실에 기반하여 답변:\n{state['question']}"
         answer = verifier_model.invoke(prompt)
+
+        answer_text = answer.content.strip()
+        # 빈 답변이면 UNVERIFIED로 표시하여 cross_check에서 처리 가능하게 함
+        if not answer_text:
+            answer_text = "[UNVERIFIED] 이 질문에 대한 검증 답변을 생성하지 못했음. 해당 사실을 재확인 필요."
+
         return {
             "verification_answers": [{
                 "question": state["question"],
-                "answer": answer.content,
+                "answer": answer_text,
             }]
         }
 
@@ -300,13 +309,28 @@ def make_cross_check_node(verifier_model: BaseChatModel):
             for a in va
         ) if va else "검증 결과 없음"
 
+        # UNVERIFIED 답변이 있으면 추가 경고 삽입
+        unverified_warning = ""
+        if va:
+            unverified = [a for a in va if "[UNVERIFIED]" in a.get("answer", "")]
+            if unverified:
+                questions = ", ".join(a.get("question", "")[:60] for a in unverified)
+                unverified_warning = (
+                    f"\n[경고] 다음 질문에 대해 검증이 불가능했다: {questions}\n"
+                    f"해당 사실에 관련된 구체적 날짜, 버전 번호, 이벤트명이 정확한지 "
+                    f"확인할 수 없으므로, 확실하지 않은 구체적 날짜/버전은 "
+                    f"제거하거나 '정확한 날짜 확인 필요' 등으로 표시하라.\n"
+                )
+
         verified_draft = verifier_model.invoke(
             f"{TOPIC_PRESERVATION_RULE}\n"
             f"원본 요청: {original_query}\n\n"
             f"초안:\n{original_draft}\n\n"
-            f"검증 결과:\n{va_text}\n\n"
+            f"검증 결과:\n{va_text}\n"
+            f"{unverified_warning}\n"
             f"불일치 사항이 있으면 초안을 수정하라. "
             f"특히 원본 요청의 주제와 다른 주제로 대체된 부분이 있으면 반드시 수정하라. "
+            f"검증되지 않은 구체적 날짜나 버전 번호는 제거하거나 불확실성을 명시하라. "
             f"수정된 초안 전체를 출력하라."
         )
         # 빈/축소 응답 방어: LLM이 빈 내용이나 극단적으로 짧은 응답을 반환하면
