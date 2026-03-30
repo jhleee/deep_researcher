@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-03-30 23:15:08",
+  "total_queries": 2,
+  "total_runs": 2,
+  "results": [
+    {
+      "query_id": 11,
+      "difficulty": "hard",
+      "query": "2024년 상반기에 발견된 'XZ Utils 백도어 사태'와 관련하여, 해당 보안 취약점의 정확한 CVE 식별자, CVSS 점수, 그리고 이를 최초로 발견한 엔지니어의 이름과 소속(발견 당시 기준)을 명시하세요.",
+      "cycles_used": 1,
+      "final_status": "success",
+      "final_elapsed": 2108.6923434734344,
+      "gt_found": [
+        "CVE-2024-3094"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q11_c0_1774876769"
+      ]
+    },
+    {
+      "query_id": 12,
+      "difficulty": "hard",
+      "query": "OpenAI가 2024년 2월에 공개한 모델 'Sora'의 공식 기술 보고서(Technical Report)에 명시된 'Diffusion Transformer(DiT)' 아키텍처의 정확한 총 파라미터(Parameter) 수와 패치(Patch)의 차원(Dimensionality) 크기를 요약해 주세요.",
+      "cycles_used": 1,
+      "final_status": "success",
+      "final_elapsed": 1230.2656252384186,
+      "gt_found": [
+        "Sora"
+      ],
+      "gt_missing": [],
+      "contamination": [],
+      "cause": "",
+      "run_ids": [
+        "sil_q12_c0_1774878877"
+      ]
+    }
+  ],
+  "passed": 2,
+  "total_time": 3338.957968711853
+}

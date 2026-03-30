@@ -1,0 +1,28 @@
+{
+  "run_id": "sil_q12_c0_1774878877",
+  "query": "OpenAI가 2024년 2월에 공개한 모델 'Sora'의 공식 기술 보고서(Technical Report)에 명시된 'Diffusion Transformer(DiT)' 아키텍처의 정확한 총 파라미터(Parameter) 수와 패치(Patch)의 차원(Dimensionality) 크기를 요약해 주세요.",
+  "status": "success",
+  "start_time": 1774878877.7772236,
+  "start_time_iso": "2026-03-30 22:54:37",
+  "elapsed": 1230.27,
+  "step_count": 14,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}

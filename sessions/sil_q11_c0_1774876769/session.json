@@ -1,0 +1,29 @@
+{
+  "run_id": "sil_q11_c0_1774876769",
+  "query": "2024년 상반기에 발견된 'XZ Utils 백도어 사태'와 관련하여, 해당 보안 취약점의 정확한 CVE 식별자, CVSS 점수, 그리고 이를 최초로 발견한 엔지니어의 이름과 소속(발견 당시 기준)을 명시하세요.",
+  "status": "success",
+  "start_time": 1774876769.071849,
+  "start_time_iso": "2026-03-30 22:19:29",
+  "elapsed": 2108.69,
+  "step_count": 15,
+  "error_msg": "",
+  "last_node": "finalize",
+  "completed_nodes": [
+    "term_resolver",
+    "planner",
+    "storm_worker",
+    "storm_worker",
+    "storm_worker",
+    "synthesis",
+    "cove_plan",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "factored_verifier",
+    "cross_check",
+    "sanitizer",
+    "finalize"
+  ],
+  "phase": "complete"
+}
