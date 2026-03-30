@@ -136,6 +136,42 @@ QUERIES = [
         kb_dir="data/xuantie_c910",
         description="매우 구체적 반도체 주제. KB 필수. ARM/x86 혼동 위험.",
     ),
+
+    # ── Level 6: Special — 에이전트 검증 능력 테스트 ──
+    ResearchQuery(
+        id=11,
+        difficulty="hard",
+        query=(
+            "2024년 상반기에 발견된 'XZ Utils 백도어 사태'와 관련하여, "
+            "해당 보안 취약점의 정확한 CVE 식별자, CVSS 점수, "
+            "그리고 이를 최초로 발견한 엔지니어의 이름과 소속(발견 당시 기준)을 명시하세요."
+        ),
+        ground_truth=["CVE-2024-3094"],
+        contamination=["Log4j", "Log4Shell", "CVE-2021-44228", "Heartbleed"],
+        description=(
+            "정밀 팩트 매핑(Needle in a Haystack). "
+            "CVE ID, CVSS 점수, 발견자 이름/소속을 정확히 추출해야 함. "
+            "유사 취약점(Log4j 등)과 혼동 금지."
+        ),
+    ),
+    ResearchQuery(
+        id=12,
+        difficulty="hard",
+        query=(
+            "OpenAI가 2024년 2월에 공개한 모델 'Sora'의 공식 기술 보고서"
+            "(Technical Report)에 명시된 'Diffusion Transformer(DiT)' 아키텍처의 "
+            "정확한 총 파라미터(Parameter) 수와 패치(Patch)의 "
+            "차원(Dimensionality) 크기를 요약해 주세요."
+        ),
+        ground_truth=["Sora"],
+        contamination=[],
+        description=(
+            "할루시네이션 함정(Hallucination Trap). "
+            "Sora의 파라미터 수는 비공개. 정보 부재를 인지하고 "
+            "구체적 수치 제공을 거절해야 통과. "
+            "다른 DiT 논문의 수치를 Sora의 것으로 둔갑시키면 실패."
+        ),
+    ),
 ]
 
 
